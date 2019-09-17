@@ -25,7 +25,7 @@ void initGPUTimer(GPUtimer* timer)
 {
 	memset(timer, 0, sizeof(*timer));
 
-/*	timer->supported = glfwExtensionSupported("GL_ARB_timer_query");
+	timer->supported = glfwExtensionSupported("GL_ARB_timer_query");
 	if (timer->supported) {
 #ifndef GL_ARB_timer_query
 		glGetQueryObjectui64v = (pfnGLGETQUERYOBJECTUI64V)glfwGetProcAddress("glGetQueryObjectui64v");
@@ -36,7 +36,7 @@ void initGPUTimer(GPUtimer* timer)
 		}
 #endif
 		glGenQueries(GPU_QUERY_COUNT, timer->queries);
-	}*/
+	}
 }
 
 void startGPUTimer(GPUtimer* timer)
@@ -61,13 +61,13 @@ int stopGPUTimer(GPUtimer* timer, float* times, int maxTimes)
 		// check for results if there are any
 		glGetQueryObjectiv(timer->queries[timer->ret % GPU_QUERY_COUNT], GL_QUERY_RESULT_AVAILABLE, &available);
 		if (available) {
-/*			GLuint64 timeElapsed = 0;
+			GLuint64 timeElapsed = 0;
 			glGetQueryObjectui64v(timer->queries[timer->ret % GPU_QUERY_COUNT], GL_QUERY_RESULT, &timeElapsed);
 			timer->ret++;
 			if (n < maxTimes) {
 				times[n] = (float)((double)timeElapsed * 1e-9);
 				n++;
-			}*/
+			}
 		}
 	}
 	return n;
