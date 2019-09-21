@@ -175,13 +175,13 @@ int fons__tt_done(FONScontext *context)
 	return ftError == 0;
 }
 
-int fons__tt_loadFont(FONScontext *context, FONSttFontImpl *font, unsigned char *data, int dataSize)
+int fons__tt_loadFont(FONScontext *context, FONSttFontImpl *font, unsigned char *data, int dataSize,int offset)
 {
 	FT_Error ftError;
 	FONS_NOTUSED(context);
 
 	//font->font.userdata = stash;
-	ftError = FT_New_Memory_Face(ftLibrary, (const FT_Byte*)data, dataSize, 0, &font->font);
+	ftError = FT_New_Memory_Face(ftLibrary, (const FT_Byte*)data, dataSize, offset, &font->font);
 	return ftError == 0;
 }
 
@@ -278,13 +278,13 @@ int fons__tt_done(FONScontext *context)
 	return 1;
 }
 
-int fons__tt_loadFont(FONScontext *context, FONSttFontImpl *font, unsigned char *data, int dataSize)
+int fons__tt_loadFont(FONScontext *context, FONSttFontImpl *font, unsigned char *data, int dataSize,int offset)
 {
 	int stbError;
 	FONS_NOTUSED(dataSize);
 
 	font->font.userdata = context;
-	stbError = stbtt_InitFont(&font->font, data, 0);
+	stbError = stbtt_InitFont(&font->font, data, offset);
 	return stbError;
 }
 
@@ -943,7 +943,12 @@ int fonsAddFontMem(FONScontext* stash, const char* name, unsigned char* data, in
 
 	// Init font
 	stash->nscratch = 0;
-	if (!fons__tt_loadFont(stash, &font->font, data, dataSize)) goto error;
+	if (strcmp(font->name, "SIMSUN") == 0) {
+		if (!fons__tt_loadFont(stash, &font->font, data, dataSize, 20)) goto error;
+	}else{
+		if (!fons__tt_loadFont(stash, &font->font, data, dataSize, 0)) goto error;
+	}
+	
 
 	// Store normalized line height. The real line height is got
 	// by multiplying the lineh by font size.
