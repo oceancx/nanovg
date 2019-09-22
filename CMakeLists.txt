@@ -16,6 +16,10 @@ add_library(nanovg
     ${SOURCES_HEADER_PUB}
     src/nanovg.c
 )
+set(NANOVG_C_SOURCE 
+    src/nanovg.c
+)
+set_source_files_properties(${NANOVG_SOURCE} PROPERTIES LANGUAGE C)
 
 target_include_directories(nanovg
     PUBLIC
